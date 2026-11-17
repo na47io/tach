@@ -20,12 +20,6 @@ jobs:
           - runner: ubuntu-22.04-arm
             target: aarch64
             manylinux: auto
-          - runner: macos-15-intel
-            target: x86_64
-            manylinux: auto
-          - runner: macos-15
-            target: aarch64
-            manylinux: auto
     runs-on: ${{ matrix.runner }}
     steps:
       - uses: actions/checkout@v4
@@ -41,7 +35,7 @@ jobs:
       - name: Test installed wheel
         run: |
           python -m pip install dist/*.whl pytest pytest-mock tomli
-          python -m pytest -p no:tach python/tests/test_workspace_modules.py python/tests/test_version.py -q
+          python -m pytest --import-mode=importlib -p no:tach python/tests/test_workspace_modules.py python/tests/test_version.py -q
       - uses: actions/upload-artifact@v4
         with:
           name: wheels-${{ matrix.runner }}-${{ matrix.target }}
@@ -68,4 +62,4 @@ jobs:
         run: |
           cd dist
           sha256sum *.whl > SHA256SUMS
-          gh release create "$TAG" *.whl SHA256SUMS --verify-tag --title "$TAG" --notes "Workspace boundary enforcement fork. Source commit: $COMMIT. Wheels tested on Linux and macOS, x86_64 and arm64."
+          gh release create "$TAG" *.whl SHA256SUMS --verify-tag --title "$TAG" --notes "Workspace boundary enforcement fork. Source commit: $COMMIT. Wheels tested on Linux, x86_64 and arm64."
