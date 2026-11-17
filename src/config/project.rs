@@ -73,6 +73,9 @@ pub struct ProjectConfig {
     #[serde(default, skip_serializing_if = "Not::not")]
     #[pyo3(get)]
     pub exact: bool,
+    #[serde(default, skip_serializing_if = "Not::not")]
+    #[pyo3(get)]
+    pub workspace_modules: bool,
     #[serde(
         default = "utils::default_true",
         skip_serializing_if = "utils::is_true"
@@ -145,6 +148,7 @@ impl Default for ProjectConfig {
             cache: Default::default(),
             external: Default::default(),
             exact: Default::default(),
+            workspace_modules: Default::default(),
             include_string_imports: Default::default(),
             forbid_circular_dependencies: Default::default(),
             layers_explicit_depends_on: Default::default(),

@@ -372,6 +372,25 @@ name = "myorg-utility"
 
 ### Example: Monorepo - Workspace Packages
 
+By default, imports between separate packages are excluded from the internal module graph.
+To enforce module dependencies, interfaces, layers, and circular dependency rules across
+workspace packages, enable `workspace_modules` in `tach.toml`:
+
+```toml
+workspace_modules = true
+```
+
+This includes imports resolving to any configured source root in the internal graph,
+even when the importing and imported files belong to different `pyproject.toml` packages.
+It does not include third-party packages or discover workspace members automatically;
+keep all first-party source roots in `source_roots`. The default is `false`.
+Cross-package dependencies must then be declared in the module configuration just like
+same-package dependencies. `tach sync` can update these declarations.
+
+With either setting, `tach check-external` still validates dependencies declared in
+each package's `pyproject.toml`. Enabling `workspace_modules` does not replace or relax
+this check.
+
 Suppose you work on a 'monorepo', in which Python packages which import from each other are located in distinct project directories.
 You may package your utility libraries in a `utility`folder, while your core packages live in `core_one` and `core_two`.
 You may also use something like [uv workspaces](https://docs.astral.sh/uv/concepts/projects/workspaces/#getting-started) to organize these packages.

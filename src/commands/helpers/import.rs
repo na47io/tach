@@ -83,7 +83,7 @@ pub fn get_located_project_imports<P: AsRef<Path>>(
                 PackageResolution::Found {
                     package: resolved_package,
                     ..
-                } => package.root == resolved_package.root,
+                } => project_config.workspace_modules || package.root == resolved_package.root,
                 PackageResolution::NotFound | PackageResolution::Excluded => false,
             }
         })

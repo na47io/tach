@@ -114,7 +114,9 @@ impl<'a> FileProcessor<'a, ProjectFile<'a>> for InternalDependencyExtractor<'a> 
                     package: resolved_package,
                     ..
                 } => {
-                    if resolved_package.root == package.root {
+                    if self.project_config.workspace_modules
+                        || resolved_package.root == package.root
+                    {
                         return Some(Dependency::Import(import));
                     }
                 }
